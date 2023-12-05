@@ -14,38 +14,43 @@
 
 import streamlit as st
 from streamlit.logger import get_logger
+from transformers import  pipeline
 
 LOGGER = get_logger(__name__)
+model = "sivan22/halacha-siman-classifier"
+
+
+def get_predicts_local(input)->str:
+    classifier = pipeline( model=model)
+    predicts = classifier(input)
+    return predicts
+
+def get_predicts_online(input)->str:
+    import requests
+    API_URL = "https://api-inference.huggingface.co/models/sivan22/halacha-siman-seif-classifier"
+    headers = {"Authorization": f"Bearer {'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'}"}
+    def query(input_text):
+        response = requests.post(API_URL, headers=headers, json='{inputs:' +input_text+'}')
+        if response.status_code == 503:
+            response = requests.post(API_URL, headers=headers, json='{{inputs:' +input_text+'}{wait_for_model:true}}')        
+        return response.json()
+    predicts = query(input)
+    return predicts
 
 
 def run():
     st.set_page_config(
-        page_title="Hello",
-        page_icon="👋",
+        page_title="Halacha classification",
+        page_icon="",
     )
 
-    st.write("# Welcome to Streamlit! 👋")
-
-    st.sidebar.success("Select a demo above.")
-
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
-    )
-
+    st.write("# חיפוש בשולחן ערוך")
+    user_input = st.text_input('כתוב כאן את שאלתך', placeholder='כמה נרות מדליקים בחנוכה')
+    if st.button('Predict'):
+        if(user_input!="" ):
+              for prediction in get_predicts_online(user_input):
+                  st.write('סימן ' + str(prediction))
+            
 
 if __name__ == "__main__":
     run()
