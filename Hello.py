@@ -1,17 +1,3 @@
-# Copyright (c) Streamlit Inc. (2018-2022) Snowflake Inc. (2022)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import streamlit as st
 from streamlit.logger import get_logger
 from transformers import  pipeline
@@ -21,13 +7,13 @@ model = "sivan22/halacha-siman-classifier"
 
 
 def get_predicts_local(input)->str:
-    classifier = pipeline( model=model)
+    classifier = pipeline("text-classification",model=model)
     predicts = classifier(input)
     return predicts
 
 def get_predicts_online(input)->str:
     import requests
-    API_URL = "https://api-inference.huggingface.co/models/sivan22/halacha-siman-seif-classifier"
+    API_URL = "https://api-inference.huggingface.co/models/" + model
     headers = {"Authorization": f"Bearer {'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'}"}
     def query(input_text):
         response = requests.post(API_URL, headers=headers, json='{inputs:' +input_text+'}')
@@ -37,7 +23,6 @@ def get_predicts_online(input)->str:
     predicts = query(input)
     return predicts
 
-
 def run():
     st.set_page_config(
         page_title="Halacha classification",
@@ -45,12 +30,18 @@ def run():
     )
 
     st.write("# חיפוש בשולחן ערוך")
+    use_local = st.checkbox("חיפוש לא מקוון")
     user_input = st.text_input('כתוב כאן את שאלתך', placeholder='כמה נרות מדליקים בחנוכה')
-    if st.button('Predict'):
+    if st.button('השב'):
         if(user_input!="" ):
-              for prediction in get_predicts_online(user_input):
-                  st.write('סימן ' + str(prediction))
-            
+            if use_local:
+                for prediction in get_predicts_local(user_input):
+                        st.write('סימן ' + str(prediction['label']))
+            else:            
+                for prediction in get_predicts_online(user_input)[0][:5]:
+                    st.write('סימן ' + str(prediction['label']))
+
+    
 
 if __name__ == "__main__":
     run()
