@@ -5,3 +5,4 @@ pydeck
 streamlit
 torch
 transformers
+datasets
