@@ -8,28 +8,17 @@ import pandas as pd
 LOGGER = get_logger(__name__)
 model = "sivan22/halacha-siman-seif-classifier"
 
+@st.cache_data
 ds = datasets.load_from_disk('sivan22/orach-chaim')
 df = ds['train'].to_pandas()
 def clean(s)->str:
     return s.replace(" ","")
 df['seif']= df['seif'].apply(clean)
 
-
-
+@st.cache_resource
 def get_predicts(input)->str:
     classifier = pipeline("text-classification",model=model,top_k=None)
-    classifier.save_pretrained(model)
-    predicts = classifier(model)
-    return predicts
-
-def get_predicts_online(input)->str:
-    import requests
-    API_URL = "https://api-inference.huggingface.co/models/" + model
-    headers = {"Authorization": f"Bearer {'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'}"}
-    def query(input_text):
-        response = requests.post(API_URL, headers=headers, json='{{inputs:' +input_text+'}{wait_for_model:true}}')        
-        return response.json()
-    predicts = query(input)
+    predicts = classifier(input)
     return predicts
 
 def run():
