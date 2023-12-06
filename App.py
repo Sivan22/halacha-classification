@@ -9,8 +9,7 @@ LOGGER = get_logger(__name__)
 model = "sivan22/halacha-siman-seif-classifier"
 
 
-login('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')
-ds = datasets.load_dataset('sivan22/orach-chaim',token=True)
+ds = datasets.load_dataset('sivan22/orach-chaim')
 df = ds['train'].to_pandas()
 def clean(s)->str:
     return s.replace(" ","")
@@ -26,7 +25,7 @@ def get_predicts_local(input)->str:
 def get_predicts_online(input)->str:
     import requests
     API_URL = "https://api-inference.huggingface.co/models/" + model
-    headers = {"Authorization": f"Bearer {'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'}"}
+    headers = {"Authorization": f"Bearer {'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'}"}
     def query(input_text):
         response = requests.post(API_URL, headers=headers, json='{{inputs:' +input_text+'}{wait_for_model:true}}')        
         return response.json()
