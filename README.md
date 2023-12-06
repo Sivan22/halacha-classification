@@ -5,9 +5,8 @@
 תוכנה זו מיועדת להדגמת יכולת של חיפוש לפי משמעות ולא לפי מילה מדוייקת, היא מוצאת את הסימן והסעיף בו נמצא הנידון שבחיפוש.
 
 להתקנה:
-'''
-pip intall sreamlit
+
+<code>pip intall sreamlit
 git clone https://github.com/Sivan22/halacha-classification.git
 cd halacha-classification
-streamlit run App.py
-'''
+streamlit run App.py<code/>
