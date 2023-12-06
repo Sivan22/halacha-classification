@@ -6,7 +6,7 @@
 
 להתקנה:
 
-<code>pip intall sreamlit
+<code>pip intall streamlit
 git clone https://github.com/Sivan22/halacha-classification.git
 cd halacha-classification
 streamlit run App.py<code/>
