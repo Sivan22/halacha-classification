@@ -8,10 +8,7 @@ import pandas as pd
 LOGGER = get_logger(__name__)
 model = "sivan22/halacha-siman-seif-classifier"
 
-
-login('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')
-ds = datasets.load_dataset('sivan22/orach-chaim',token=True)
-ds.save_to_disk('sivan22/orach-chaim')
+ds = datasets.load_from_disk('sivan22/orach-chaim')
 df = ds['train'].to_pandas()
 def clean(s)->str:
     return s.replace(" ","")
