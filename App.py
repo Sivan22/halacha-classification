@@ -6,7 +6,7 @@ import pandas as pd
 from huggingface_hub import login
 
 LOGGER = get_logger(__name__)
-model = "sivan22/halacha-siman-seif-classifier-new"
+model = "sivan22/halacha-siman-seif-classifier"
 
 
 login('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')
