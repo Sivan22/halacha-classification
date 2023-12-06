@@ -1,0 +1,62 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "orach-chaim",
+  "dataset_size": 24569065,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/sivan22/orach-chaim@a5608f75949d3ed42b147d852c38a3068c4cbd15/data/train-00000-of-00001.parquet": {
+      "num_bytes": 10932463,
+      "checksum": null
+    }
+  },
+  "download_size": 10932463,
+  "features": {
+    "Unnamed: 0": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "bookname": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "siman": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sek": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "text": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "seif": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "topic": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 35501528,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 24569065,
+      "num_examples": 42608,
+      "dataset_name": "orach-chaim"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

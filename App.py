@@ -3,51 +3,51 @@ from streamlit.logger import get_logger
 from transformers import  pipeline
 import datasets
 import pandas as pd
+from huggingface_hub import login
 
 
 LOGGER = get_logger(__name__)
-model = "sivan22/halacha-siman-seif-classifier"
-
-ds = datasets.load_from_disk('sivan22/orach-chaim')
-df = ds['train'].to_pandas()
-def clean(s)->str:
-    return s.replace(" ","")
-df['seif']= df['seif'].apply(clean)
 
 
+@st.cache_data
+def get_df() ->object:
+    ds = datasets.load_from_disk('sivan22/orach-chaim')
+    df = ds['train'].to_pandas()
+    def clean(s)->str:
+        return s.replace(" ","")
+    df['seif']= df['seif'].apply(clean)
+    return df
 
-def get_predicts(input)->str:
-    classifier = pipeline("text-classification",model=model,top_k=None)
-    classifier.save_pretrained(model)
-    predicts = classifier(model)
-    return predicts
+@st.cache_resource
+def get_model()->object:
+    model = "sivan22/halacha-siman-seif-classifier"
+    classifier = pipeline("text-classification",model=model,top_k=None,device='cuda')
+    return classifier
 
-def get_predicts_online(input)->str:
-    import requests
-    API_URL = "https://api-inference.huggingface.co/models/" + model
-    headers = {"Authorization": f"Bearer {'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'}"}
-    def query(input_text):
-        response = requests.post(API_URL, headers=headers, json='{{inputs:' +input_text+'}{wait_for_model:true}}')        
-        return response.json()
-    predicts = query(input)
+def get_predicts(classifier,input)->str:
+    predicts = classifier(input)
     return predicts
 
 def run():
     st.set_page_config(
-        page_title="Halacha classification",
+        page_title="חיפוש חכם בשולחן ערוך",
         page_icon="",
     )
-
     st.write("# חיפוש בשולחן ערוך")
-    user_input = st.text_input('כתוב כאן את שאלתך', placeholder='כמה נרות מדליקים בחנוכה')
+    classifier = get_model()
+    
+    df = get_df()
+    user_input = st.text_input('כתוב כאן את שאלתך', placeholder='כמה נרות מדליקים בכל לילה מלילות החנוכה')    
+    num_of_results = st.sidebar.slider('מספר התוצאות שברצונך להציג:',1,25,5)
+    
     if st.button('חפש') and user_input!="":       
-        for prediction in get_predicts(user_input)[0][:5]:
+        for prediction in get_predicts(classifier,user_input)[0][:num_of_results]:
             rows = df[((df["bookname"] == " שלחן ערוך - אורח חיים ") |
                         (df["bookname"] ==" משנה ברורה")) &
                       (df["siman"] == prediction['label'].split(' ')[0])&
                       (df["seif"] == prediction['label'].split(' ')[1]) ]
             rows.sort_values(["bookname"],ascending=False, inplace=True) 
-            st.write('סימן ' + str(prediction['label']), rows[['text','sek','seif','siman','bookname']])
+            st.write('סימן ' + str(prediction['label']), rows[['text','bookname','sek','seif','siman',]])
 
     
 
