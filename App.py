@@ -7,6 +7,7 @@ from huggingface_hub import login
 
 
 LOGGER = get_logger(__name__)
+<<<<<<< HEAD
 
 
 @st.cache_data
@@ -25,6 +26,20 @@ def get_model()->object:
     return classifier
 
 def get_predicts(classifier,input)->str:
+=======
+model = "sivan22/halacha-siman-seif-classifier"
+
+@st.cache_data
+ds = datasets.load_from_disk('sivan22/orach-chaim')
+df = ds['train'].to_pandas()
+def clean(s)->str:
+    return s.replace(" ","")
+df['seif']= df['seif'].apply(clean)
+
+@st.cache_resource
+def get_predicts(input)->str:
+    classifier = pipeline("text-classification",model=model,top_k=None)
+>>>>>>> 47b5e4bb255746c8628096b9bb5ce012a12f1263
     predicts = classifier(input)
     return predicts
 
