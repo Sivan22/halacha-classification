@@ -21,7 +21,7 @@ def get_df() ->object:
 @st.cache_resource
 def get_model()->object:
     model = "sivan22/halacha-siman-seif-classifier"
-    classifier = pipeline("text-classification",model=model,top_k=None,device='cuda')
+    classifier = pipeline("text-classification",model=model,top_k=None)
     return classifier
 
 def get_predicts(classifier,input)->str:

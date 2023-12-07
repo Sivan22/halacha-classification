@@ -1,7 +1,4 @@
-altair
-numpy
 pandas
-pydeck
 streamlit
 torch
 transformers

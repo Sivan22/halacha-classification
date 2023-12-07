@@ -20,16 +20,10 @@ Searches are based on a text-classification model, with categories being chapter
 ## גישה מבוססת סיווג
 החיפוש מתבצע באמצעות מודל שאומן למשימה של סיווג טקסט, הקטגוריות לסיווג הן הסימן והסעיף בו נמצא הנידון שבחיפוש.
 
+להתקנה:
 
-# installation
-### prerequists
-* python
-* GIT
-
-### installation
-run in your CLI:
 <code>
+pip intall sreamlit
 git clone https://github.com/Sivan22/halacha-classification.git
 cd halacha-classification
-pip install -r requirements.txt
 streamlit run App.py<code/>
