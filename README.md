@@ -19,7 +19,7 @@ Searches are based on a text-classification model, with categories being chapter
 
 ## גישה מבוססת סיווג
 החיפוש מתבצע באמצעות מודל שאומן למשימה של סיווג טקסט, הקטגוריות לסיווג הן הסימן והסעיף בו נמצא הנידון שבחיפוש.
-
+# installation
 להתקנה:
 
 <code>
