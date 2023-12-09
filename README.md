@@ -23,7 +23,7 @@ Searches are based on a text-classification model, with categories being chapter
 להתקנה:
 
 <code>
-pip intall sreamlit
 git clone https://github.com/Sivan22/halacha-classification.git
 cd halacha-classification
+pip install -r requirements.txt
 streamlit run App.py<code/>
