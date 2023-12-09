@@ -33,21 +33,23 @@ def run():
         page_title="חיפוש חכם בשולחן ערוך",
         page_icon="",
     )
-    st.write("# חיפוש בשולחן ערוך")
-    classifier = get_model()
+    st.write("# חיפוש חכם בשולחן ערוך")
     
+    classifier = get_model()    
     df = get_df()
+    
     user_input = st.text_input('כתוב כאן את שאלתך', placeholder='כמה נרות מדליקים בכל לילה מלילות החנוכה')    
     num_of_results = st.sidebar.slider('מספר התוצאות שברצונך להציג:',1,25,5)
     
-    if st.button('חפש') and user_input!="":       
+    if st.button('חפש') and user_input!="":
         for prediction in get_predicts(classifier,user_input)[0][:num_of_results]:
-            rows = df[((df["bookname"] == " שלחן ערוך - אורח חיים ") |
-                        (df["bookname"] ==" משנה ברורה")) &
-                      (df["siman"] == prediction['label'].split(' ')[0])&
-                      (df["seif"] == prediction['label'].split(' ')[1]) ]
-            rows.sort_values(["bookname"],ascending=False, inplace=True) 
-            st.write('סימן ' + str(prediction['label']), rows[['text','bookname','sek','seif','siman',]])
+            siman = prediction['label'].split(' ')[0]
+            seif = prediction['label'].split(' ')[1]
+            rows = df[((df["bookname"] == " שלחן ערוך - אורח חיים ") | (df["bookname"] ==" משנה ברורה")) &
+                      (df["siman"] == siman) &
+                      (df["seif"] == seif) ]
+            rows = rows.sort_values(["bookname"],ascending=False) 
+            st.write(('סימן ' + siman + ' סעיף ' + seif), rows[['text','bookname','sek','seif','siman',]])
 
     
 
