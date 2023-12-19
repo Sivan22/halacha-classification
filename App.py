@@ -43,7 +43,7 @@ def run():
     df = get_df()
     
     user_input = st.text_input('כתוב כאן את שאלתך', placeholder='כמה נרות מדליקים בכל לילה מלילות החנוכה')    
-    num_of_results = st.sidebar.slider('‮מספר התוצאות שברצונך להציג:',1,25,5)
+    num_of_results = st.sidebar.slider('מספר התוצאות שברצונך להציג:',1,25,5)
     
     if (st.button('חפש') or user_input) and user_input!="":
         predictions = get_predicts(classifier,user_input)[0][:num_of_results]
@@ -56,11 +56,12 @@ def run():
             rows = rows.sort_values(["bookname"],ascending=False) 
             st.write(('סימן ' + siman + ' סעיף ' + seif), rows[['text','bookname','sek','seif','siman',]])
             
-        feedback_picker = st.sidebar.selectbox("‮עזור לי להשתפר! מהי התוצאה הנכונה ביותר לדעתך?",[ '‮'+str(i+1)+') '+p['label']  for i,p in enumerate(predictions)])
+        feedback_picker = st.sidebar.selectbox("עזור לי להשתפר! מהי התוצאה הנכונה ביותר לדעתך?",[ str(i+1)+') '+p['label']  for i,p in enumerate(predictions)])
         if st.sidebar.button("אישור"):
+            print("TEXT: " +user_input + "\t" +"LABEL: "+feedback_picker+'\n')
             with open("feedback.txt","+a",encoding="utf-8") as file:
                 file.write("TEXT: " +user_input + "\t" +"LABEL: "+feedback_picker+'\n')
-            st.sidebar.write("‮תודה על המשוב!")
+            st.sidebar.write("תודה על המשוב!")
 
 if __name__ == "__main__":
     run()
