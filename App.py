@@ -57,10 +57,8 @@ def run():
             st.write(('סימן ' + siman + ' סעיף ' + seif), rows[['text','bookname','sek','seif','siman',]])
             
         feedback_picker = st.sidebar.selectbox("עזור לי להשתפר! מהי התוצאה הנכונה ביותר לדעתך?",[ str(i+1)+') '+p['label']  for i,p in enumerate(predictions)])
-        if st.sidebar.button("אישור"):
-            print("TEXT: " +user_input + "\t" +"LABEL: "+feedback_picker+'\n')
-            with open("feedback.txt","+a",encoding="utf-8") as file:
-                file.write("TEXT: " +user_input + "\t" +"LABEL: "+feedback_picker+'\n')
+        if st.sidebar.button("אישור"):           
+            LOGGER.info("TEXT: " +user_input + "\t" +"LABEL: "+feedback_picker)
             st.sidebar.write("תודה על המשוב!")
 
 if __name__ == "__main__":
